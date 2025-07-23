@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #f9fafb;
+  color: #22223b;
+  transition: background 0.3s, color 0.3s;
+  
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fira Mono', 'Inter', monospace;
+  color: #1e293b;
+  transition: color 0.3s;
+}
+
+a {
+  color: #2563eb;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: #1d4ed8;
+}
+
+html.dark body {
+  background-color: #181926;
+  color: #e0e0e0;
+}
+
+html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6 {
+  color: #c7d2fe;
+}
+
+html.dark a {
+  color: #60a5fa;
+}
+
+html.dark a:hover {
+  color: #3b82f6;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@layer utilities {
+  .animate-bounce-slow {
+    animation: bounce 2.5s infinite;
+  }
+  .animate-fade-in {
+    animation: fadeIn 1.2s ease-in;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: none; }
+}
