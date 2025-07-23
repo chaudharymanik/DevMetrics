@@ -1,6 +1,5 @@
 # DevMetric
 
-![DevMetric Banner]
 
 **DevMetric** is a full-stack, AI-powered Developer Portfolio Analyzer. It helps developers instantly analyze their **GitHub**, **LeetCode**, and **Resume** to receive concise, actionable feedback and improvement tips—powered by **Google Gemini AI**.
 
@@ -125,16 +124,6 @@ GEMINI_API_KEY=your_gemini_api_key_here
 
 ---
 
-## 🖼 Screenshots
-
-> _You can replace these placeholder images with actual UI screenshots._
-
-| Home Page | GitHub Analysis |
-|-----------|------------------|
-| ![Home](client/public/logo192.png) | ![GitHub](client/public/logo512.png) |
-
----
-
 ## 🎨 Customization & Branding
 
 - Project name: **DevMetric** (used in tab title, manifest, navbar, footer, etc.)
@@ -156,12 +145,6 @@ Want to contribute? Great! Follow these steps:
 3. Make your changes and commit: `git commit -m "Add: New Feature"`
 4. Push to your branch: `git push origin feature/your-feature-name`
 5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ---
 
