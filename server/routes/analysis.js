@@ -28,6 +28,32 @@ async function fetchGitHubData(username) {
   return { profile: userRes.data, repos: reposRes.data };
 }
 
+// General Analyzer
+router.post('/analyze', async (req, res) => {
+  const { profileSummary } = req.body;
+  if (!profileSummary) {
+    return res.status(400).json({ error: 'No profile summary provided.' });
+  }
+  
+  const prompt = `Analyze this developer profile summary. Use ONLY bullet points. Keep each point under 8 words. Format as markdown.
+
+Profile Summary: ${profileSummary}
+
+Structure:
+## Analysis
+- [3 bullet points about the profile]
+
+## Improvement Tips  
+- [3 actionable tips, max 8 words each]`;
+
+  try {
+    const suggestion = await getGeminiSuggestion(prompt);
+    res.json({ suggestion });
+  } catch (err) {
+    res.status(500).json({ error: 'Analysis failed', details: err.message });
+  }
+});
+
 // GitHub Analyzer
 router.post('/analyze-github', async (req, res) => {
   let username = req.body.githubProfile || '';

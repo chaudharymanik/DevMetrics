@@ -21,11 +21,11 @@ export default function AnimatedLoader({ color = "blue", customMessages }) {
 
   return (
     <div className="flex flex-col items-center justify-center py-16">
-      <svg className={`animate-spin mb-6 h-12 w-12 text-${color}-500 dark:text-${color}-400`} viewBox="0 0 24 24">
+      <svg className={`animate-spin mb-6 h-12 w-12 ${color === 'blue' ? 'text-blue-500 dark:text-blue-400' : 'text-green-500 dark:text-green-400'}`} viewBox="0 0 24 24">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
       </svg>
-      <div className={`text-lg font-semibold text-${color}-700 dark:text-${color}-300 transition-colors duration-300`}>{usedMessages[step]}</div>
+      <div className={`text-lg font-semibold ${color === 'blue' ? 'text-blue-700 dark:text-blue-300' : 'text-green-700 dark:text-green-300'} transition-colors duration-300`}>{usedMessages[step]}</div>
     </div>
   );
 } 

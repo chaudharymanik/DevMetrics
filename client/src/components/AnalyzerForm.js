@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../App";
 
 export default function AnalyzerForm() {
   const [input, setInput] = useState("");
@@ -11,7 +12,7 @@ export default function AnalyzerForm() {
     setLoading(true);
     setSuggestion("");
     try {
-      const res = await axios.post("/api/analyze", { profileSummary: input });
+      const res = await axios.post(`${API_BASE_URL}/api/analyze`, { profileSummary: input });
       setSuggestion(res.data.suggestion);
     } catch (err) {
       setSuggestion("Error: " + (err.response?.data?.error || "Something went wrong"));

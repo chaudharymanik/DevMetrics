@@ -21,21 +21,21 @@ const navigationItems = [
     activeColor: "text-blue-600 dark:text-blue-300"
   },
   {
-    path: "/github",
+    path: "/github-analyzer",
     label: "GitHub",
     icon: FaGithub,
     hoverColor: "hover:text-gray-800 dark:hover:text-gray-300",
     activeColor: "text-gray-800 dark:text-gray-300"
   },
   {
-    path: "/leetcode",
+    path: "/leetcode-analyzer",
     label: "LeetCode",
     icon: FaLaptopCode,
     hoverColor: "hover:text-orange-600 dark:hover:text-orange-300",
     activeColor: "text-orange-600 dark:text-orange-300"
   },
   {
-    path: "/resume",
+    path: "/resume-analyzer",
     label: "Resume",
     icon: FaFileAlt,
     hoverColor: "hover:text-green-600 dark:hover:text-green-300",
