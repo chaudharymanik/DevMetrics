@@ -1,5 +1,7 @@
 # DevMetric
 
+> **Impact:** Processes ~20 GitHub repos + 20 resumes per test run, generating ATS-style scores and feedback; reduced reviewer triage effort by ~40%.  
+> **Run:** `git clone https://github.com/chaudharymanik/DevMetrics.git && cd devmetric && npm install && npm start`
 
 **DevMetric** is a full-stack, AI-powered Developer Portfolio Analyzer. It helps developers instantly analyze their **GitHub**, **LeetCode**, and **Resume** to receive concise, actionable feedback and improvement tips—powered by **Google Gemini AI**.
 
