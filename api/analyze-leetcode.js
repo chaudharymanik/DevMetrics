@@ -8,7 +8,11 @@ async function fetchLeetCodeData(username) {
     const headers = {
         'Content-Type': 'application/json',
         'Referer': 'https://leetcode.com',
+        'Origin': 'https://leetcode.com',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json',
     };
+    const axiosConfig = { headers, timeout: 10000 };
 
     // Query 1: Get problem solve counts by difficulty
     const statsQuery = {
@@ -42,7 +46,7 @@ async function fetchLeetCodeData(username) {
 
     let statsRes;
     try {
-        statsRes = await axios.post(LEETCODE_GRAPHQL, statsQuery, { headers });
+        statsRes = await axios.post(LEETCODE_GRAPHQL, statsQuery, axiosConfig);
     } catch (err) {
         throw new Error('LEETCODE_API_ERROR');
     }
@@ -61,7 +65,7 @@ async function fetchLeetCodeData(username) {
     // Fetch skill tags (best effort - don't fail if this errors)
     let categories = [];
     try {
-        const skillRes = await axios.post(LEETCODE_GRAPHQL, skillQuery, { headers });
+        const skillRes = await axios.post(LEETCODE_GRAPHQL, skillQuery, axiosConfig);
         const tags = skillRes.data?.data?.matchedUser?.tagProblemCounts;
         if (tags) {
             const allTags = [...(tags.fundamental || []), ...(tags.intermediate || []), ...(tags.advanced || [])];
