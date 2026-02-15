@@ -1,12 +1,14 @@
 const multer = require('multer');
-const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
 const path = require('path');
 const { getGeminiSuggestion } = require('./_utils/gemini');
 const { allowCors } = require('./_utils/cors');
 
 // Use memory storage for serverless (no filesystem persistence)
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 4 * 1024 * 1024 } });
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 4 * 1024 * 1024 }
+});
 
 // Helper to run multer as a promise
 function runMiddleware(req, res, fn) {
@@ -37,6 +39,8 @@ async function handler(req, res) {
         let resumeText = '';
 
         if (ext === '.pdf') {
+            // Dynamic import to avoid pdf-parse test file loading issue in serverless
+            const pdfParse = require('pdf-parse/lib/pdf-parse.js');
             const pdfData = await pdfParse(req.file.buffer);
             resumeText = pdfData.text;
         } else if (ext === '.docx') {
@@ -207,16 +211,19 @@ Begin your analysis now based on the resume text provided above.`;
         const suggestion = await getGeminiSuggestion(prompt);
         res.json({ suggestion });
     } catch (err) {
+        console.error('Resume analysis error:', err);
         res.status(500).json({ error: 'Resume analysis failed', details: err.message });
     }
 }
 
-// Export without bodyParser (multer handles the parsing)
-module.exports = allowCors(handler);
+// Export with CORS wrapper
+const wrappedHandler = allowCors(handler);
 
 // Vercel config: disable default body parser for this route (multer needs raw body)
-module.exports.config = {
+wrappedHandler.config = {
     api: {
         bodyParser: false,
     },
 };
+
+module.exports = wrappedHandler;
