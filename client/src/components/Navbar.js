@@ -1,7 +1,6 @@
-// Navbar.js
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaMoon, FaSun, FaCode, FaGithub, FaLaptopCode, FaFileAlt, FaUser, FaHome, FaEnvelope } from "react-icons/fa";
+import { FaMoon, FaSun, FaCode, FaGithub, FaLaptopCode, FaFileAlt, FaUser, FaHome, FaEnvelope, FaBars, FaTimes } from "react-icons/fa";
 
 function getInitialMode() {
   if (typeof window !== "undefined") {
@@ -13,53 +12,17 @@ function getInitialMode() {
 }
 
 const navigationItems = [
-  {
-    path: "/",
-    label: "Home",
-    icon: FaHome,
-    hoverColor: "hover:text-blue-600 dark:hover:text-blue-300",
-    activeColor: "text-blue-600 dark:text-blue-300"
-  },
-  {
-    path: "/github-analyzer",
-    label: "GitHub",
-    icon: FaGithub,
-    hoverColor: "hover:text-gray-800 dark:hover:text-gray-300",
-    activeColor: "text-gray-800 dark:text-gray-300"
-  },
-  {
-    path: "/leetcode-analyzer",
-    label: "LeetCode",
-    icon: FaLaptopCode,
-    hoverColor: "hover:text-orange-600 dark:hover:text-orange-300",
-    activeColor: "text-orange-600 dark:text-orange-300"
-  },
-  {
-    path: "/resume-analyzer",
-    label: "Resume",
-    icon: FaFileAlt,
-    hoverColor: "hover:text-green-600 dark:hover:text-green-300",
-    activeColor: "text-green-600 dark:text-green-300"
-  },
-  {
-    path: "/about",
-    label: "About",
-    icon: FaUser,
-    hoverColor: "hover:text-purple-600 dark:hover:text-purple-300",
-    activeColor: "text-purple-600 dark:text-purple-300"
-  },
-  {
-    path: "/contact",
-    label: "Contact",
-    icon: FaEnvelope,
-    hoverColor: "hover:text-red-600 dark:hover:text-red-300",
-    activeColor: "text-red-600 dark:text-red-300"
-  }
+  { path: "/", label: "Home", icon: FaHome },
+  { path: "/github-analyzer", label: "GitHub", icon: FaGithub },
+  { path: "/leetcode-analyzer", label: "LeetCode", icon: FaLaptopCode },
+  { path: "/resume-analyzer", label: "Resume", icon: FaFileAlt },
+  { path: "/about", label: "About", icon: FaUser },
+  { path: "/contact", label: "Contact", icon: FaEnvelope },
 ];
 
 export default function Navbar() {
   const [dark, setDark] = React.useState(getInitialMode);
-  const [hoveredItem, setHoveredItem] = React.useState(null);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
   const location = useLocation();
 
   React.useEffect(() => {
@@ -67,88 +30,126 @@ export default function Navbar() {
     localStorage.setItem("theme", dark ? "dark" : "light");
   }, [dark]);
 
-  const NavButton = ({ item, index }) => {
-    const isActive = location.pathname === item.path;
-    const isHovered = hoveredItem === index;
-    const IconComponent = item.icon;
+  // Close mobile menu on route change
+  React.useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
-    return (
-      <Link
-        to={item.path}
-        className={`
-          relative flex items-center gap-2 px-3 py-2 rounded-lg font-medium
-          transition-all duration-300 ease-in-out transform
-          ${isActive 
-            ? `${item.activeColor} scale-105 shadow-lg` 
-            : `text-gray-700 dark:text-gray-200 ${item.hoverColor}`
-          }
-          ${isHovered ? 'scale-110 -translate-y-1' : ''}
-          hover:shadow-md active:scale-95
-        `}
-        onMouseEnter={() => setHoveredItem(index)}
-        onMouseLeave={() => setHoveredItem(null)}
-      >
-        <IconComponent 
-          className={`
-            transition-all duration-300 ease-in-out
-            ${isActive ? 'rotate-12 scale-110' : ''}
-            ${isHovered ? 'rotate-6 scale-105' : ''}
-          `} 
-        />
-        <span className="hidden sm:inline-block">{item.label}</span>
-        
-        {/* Active indicator */}
-        {isActive && (
-          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-current rounded-full animate-pulse" />
-        )}
-        
-        {/* Hover glow effect */}
-        {isHovered && !isActive && (
-          <div className="absolute inset-0 bg-current opacity-5 rounded-lg animate-pulse" />
-        )}
-      </Link>
-    );
-  };
+  // Close on outside click
+  React.useEffect(() => {
+    if (!mobileOpen) return;
+    const handler = (e) => {
+      if (!e.target.closest('.mobile-menu') && !e.target.closest('.hamburger-btn')) {
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener('click', handler);
+    return () => document.removeEventListener('click', handler);
+  }, [mobileOpen]);
 
   return (
-    <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md shadow-lg transition-all duration-300">
-      {/* Logo */}
-      <Link 
-        to="/" 
-        className="flex items-center gap-2 text-2xl font-extrabold text-blue-700 dark:text-blue-400 hover:scale-105 transition-transform duration-300"
-      >
-        <FaCode className="inline-block animate-pulse" /> 
-        <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          DevMetric
-        </span>
-      </Link>
-
-      {/* Navigation Items */}
-      <div className="flex items-center gap-2 flex-wrap">
-        {navigationItems.map((item, index) => (
-          <NavButton key={item.path} item={item} index={index} />
-        ))}
-
-        {/* Theme Toggle Button */}
-        <button
-          aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-          className={`
-            ml-4 p-3 rounded-full bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-800 dark:to-gray-700
-            hover:from-gray-300 hover:to-gray-400 dark:hover:from-gray-700 dark:hover:to-gray-600
-            transition-all duration-300 transform hover:scale-110 active:scale-95
-            focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600
-            shadow-lg hover:shadow-xl
-          `}
-          onClick={() => setDark((d) => !d)}
+    <nav className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 transition-all duration-300">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 flex items-center justify-between h-16">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-xl font-extrabold hover:scale-105 transition-transform duration-300"
         >
-          <span className="transition-all duration-500 ease-in-out flex items-center justify-center">
-            {dark ? (
-              <FaSun className="text-yellow-400 transition-all duration-500 scale-110 rotate-180" />
-            ) : (
-              <FaMoon className="text-gray-700 transition-all duration-500 scale-110 -rotate-12" />
-            )}
+          <FaCode className="text-blue-600 dark:text-blue-400" />
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            DevMetric
           </span>
-        </button>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-1">
+          {navigationItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`
+                  flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                  ${isActive
+                    ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50"
+                  }
+                `}
+              >
+                <item.icon className="text-xs" />
+                {item.label}
+              </Link>
+            );
+          })}
+
+          {/* Theme Toggle */}
+          <button
+            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            className="ml-2 p-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200"
+            onClick={() => setDark((d) => !d)}
+          >
+            {dark ? (
+              <FaSun className="text-amber-400 text-sm" />
+            ) : (
+              <FaMoon className="text-gray-600 text-sm" />
+            )}
+          </button>
+        </div>
+
+        {/* Mobile: Theme + Hamburger */}
+        <div className="flex md:hidden items-center gap-2">
+          <button
+            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+            onClick={() => setDark((d) => !d)}
+          >
+            {dark ? (
+              <FaSun className="text-amber-400 text-sm" />
+            ) : (
+              <FaMoon className="text-gray-600 text-sm" />
+            )}
+          </button>
+          <button
+            className="hamburger-btn p-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? (
+              <FaTimes className="text-gray-600 dark:text-gray-400 text-sm" />
+            ) : (
+              <FaBars className="text-gray-600 dark:text-gray-400 text-sm" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`mobile-menu md:hidden overflow-hidden transition-all duration-300 ease-in-out ${mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`}
+      >
+        <div className="px-4 pb-4 pt-2 space-y-1 border-t border-gray-200/50 dark:border-gray-800/50">
+          {navigationItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`
+                  flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
+                  ${isActive
+                    ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50"
+                  }
+                `}
+              >
+                <item.icon />
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </nav>
   );

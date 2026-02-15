@@ -2,27 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Inter', system-ui, sans-serif;
   background-color: #f9fafb;
   color: #22223b;
   transition: background 0.3s, color 0.3s;
-  
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Fira Mono', 'Inter', monospace;
+  font-family: 'Inter', system-ui, sans-serif;
   color: #1e293b;
   transition: color 0.3s;
 }
 
 a {
-  color: #2563eb;
   transition: color 0.3s;
-}
-
-a:hover {
-  color: #1d4ed8;
 }
 
 html.dark body {
@@ -34,17 +32,29 @@ html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark 
   color: #c7d2fe;
 }
 
-html.dark a {
-  color: #60a5fa;
-}
-
-html.dark a:hover {
-  color: #3b82f6;
-}
-
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Fira Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
 @layer utilities {
@@ -52,11 +62,19 @@ code {
     animation: bounce 2.5s infinite;
   }
   .animate-fade-in {
-    animation: fadeIn 1.2s ease-in;
+    animation: fadeIn 0.8s ease-out both;
+  }
+  .animate-gradient {
+    animation: gradient 3s ease infinite;
   }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(30px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: none; }
+}
+
+@keyframes gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
